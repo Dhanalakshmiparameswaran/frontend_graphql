@@ -65,3 +65,23 @@ export const DELETE_ROW = gql`
     }
   }
 `;
+
+export const SIGNIN_MUTATION = gql`
+  mutation SignIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      id
+      email
+      role
+    }
+  }
+`;
+
+export const SIGNUP_MUTATION = gql`
+  mutation Signup($email: String!, $password: String!, $role: UserRole!) {
+    signup(email: $email, password: $password, role: $role) {
+      id
+      email
+      role
+    }
+  }
+`;

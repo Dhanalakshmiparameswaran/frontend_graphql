@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import { useMutation } from '@apollo/client';
-import '../table.css';
-import { GET_STUDENTS, UPDATE_ROW } from './fetchData';
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import { useMutation } from "@apollo/client";
+import "../table.css";
+import { GET_STUDENTS, UPDATE_ROW } from "../graphQl/graphQlMutations";
 
 export interface Student {
   id: number;
@@ -23,8 +31,14 @@ export const Table: React.FC<TableProps> = ({ data, onUpdate, onDelete }) => {
     refetchQueries: [{ query: GET_STUDENTS }],
   });
 
+  const [sortedData, setSortedData] = useState<Student[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+
+  useEffect(() => {
+    const sorted = [...data].sort((a, b) => a.id - b.id);
+    setSortedData(sorted);
+  }, [data]);
 
   const handleClose = () => {
     setOpen(false);
@@ -48,7 +62,7 @@ export const Table: React.FC<TableProps> = ({ data, onUpdate, onDelete }) => {
           mark: selectedStudent.mark.toString(),
         },
       }).catch((error) => {
-        console.error('Submit Error:', error);
+        console.error("Submit Error:", error);
       });
       handleClose();
     }
@@ -56,10 +70,14 @@ export const Table: React.FC<TableProps> = ({ data, onUpdate, onDelete }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSelectedStudent((prevData) => prevData ? {
-      ...prevData,
-      [name]: name === 'mark' ? Number(value) : value,
-    } : null);
+    setSelectedStudent((prevData) =>
+      prevData
+        ? {
+            ...prevData,
+            [name]: name === "mark" ? Number(value) : value,
+          }
+        : null
+    );
   };
 
   return (
@@ -77,7 +95,7 @@ export const Table: React.FC<TableProps> = ({ data, onUpdate, onDelete }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
+          {sortedData.map((row) => (
             <tr key={row.id}>
               <td>{row.id}</td>
               <td>{row.roll_no}</td>

@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
 import "../table.css";
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -10,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { ADD_NEW_ROW, GET_STUDENTS } from "./fetchData";
+import { ADD_NEW_ROW, GET_STUDENTS } from "../graphQl/graphQlMutations";
 
 export const AddNewRow = () => {
   const [formData, setFormData] = useState({
@@ -20,8 +21,15 @@ export const AddNewRow = () => {
     mark: "",
   });
   const [open, setOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
   const [addNewRow] = useMutation(ADD_NEW_ROW, {
     refetchQueries: [{ query: GET_STUDENTS }],
+    onCompleted: () => {
+      console.log("Mutation completed successfully");
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+    },
   });
 
   const handleAddNew = (
@@ -30,6 +38,7 @@ export const AddNewRow = () => {
     classSection: string,
     mark: string
   ) => {
+    console.log("Adding new row:", { rollno, name, classSection, mark });
     addNewRow({
       variables: {
         roll_no: rollno,
@@ -50,14 +59,14 @@ export const AddNewRow = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Form submitted:", formData);
     handleAddNew(
       formData.roll_no,
       formData.name,
       formData.classSection,
       formData.mark
     );
-    setOpen(false); 
-    console.log("Form Data:", formData);
+    setOpen(false);
   };
 
   const handleClickOpen = () => {
@@ -70,9 +79,29 @@ export const AddNewRow = () => {
 
   return (
     <>
-      <button onClick={handleClickOpen} className="btn">
-        Add New Student
-      </button>
+      <div className="header">
+        <button onClick={handleClickOpen} className="btn">
+          Add New Student
+        </button>
+      </div>
+
+      {showAlert && (
+        <Alert
+          severity="success"
+          onClose={() => setShowAlert(false)}
+          sx={{
+            position: "fixed",
+            top: 10,
+            left: "50%",
+            right: 0,
+            zIndex: 9999,
+            borderRadius: 0,
+            width: 500,
+          }}
+        >
+          Record Added Successfully
+        </Alert>
+      )}
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>Add New Student</DialogTitle>
