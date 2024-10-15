@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { SIGNUP_MUTATION } from "../graphQl/graphQlMutations";
 
 const SignupForm: React.FC = () => {
+  const [name,setName]=useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,11 +25,27 @@ const SignupForm: React.FC = () => {
   const [signup] = useMutation(SIGNUP_MUTATION);
   const navigate = useNavigate();
 
+  const isValidEmail = (email: string) => {
+    const gmailPattern = /^[^\s@]+@gmail\.com$/;
+    return gmailPattern.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setError("");
     if (!email || !password || !confirmPassword) {
       setError("All fields are required.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid Gmail address.");
+      return;
+    }
+
+    if (password.length < 6 || password.length > 12) {
+      setError("Password must be between 6 and 12 characters.");
       return;
     }
 
@@ -38,11 +55,10 @@ const SignupForm: React.FC = () => {
     }
 
     try {
-      const { data } = await signup({ variables: { email, password, role } });
-      console.log(email, password, role);
+      const { data } = await signup({ variables: { name, email, password, role } });
       if (data) {
         setError("");
-        navigate("/login");
+        navigate("/");
       }
     } catch (err) {
       setError("Signup failed. Please try again.");
@@ -61,6 +77,14 @@ const SignupForm: React.FC = () => {
           </Typography>
         )}
         <form onSubmit={handleSubmit}>
+        <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <TextField
             label="Email"
             variant="outlined"
@@ -68,6 +92,8 @@ const SignupForm: React.FC = () => {
             margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={!!error && !isValidEmail(email)}
+            helperText={error && !isValidEmail(email) ? "Invalid Gmail format." : ""}
           />
           <TextField
             label="Password"
@@ -77,6 +103,12 @@ const SignupForm: React.FC = () => {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!error && (password.length < 6 || password.length > 12)}
+            helperText={
+              error && (password.length < 6 || password.length > 12)
+                ? "Password must be between 6 and 12 characters."
+                : ""
+            }
           />
           <TextField
             label="Confirm Password"
@@ -86,6 +118,8 @@ const SignupForm: React.FC = () => {
             margin="normal"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            error={!!error && password !== confirmPassword}
+            helperText={error && password !== confirmPassword ? "Passwords do not match." : ""}
           />
           <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Role</InputLabel>
@@ -109,7 +143,7 @@ const SignupForm: React.FC = () => {
           </Button>
         </form>
         <p>
-          Already have an account? <a href="/login">Login here</a>
+          Already have an account? <a href="/">Login here</a>
         </p>
       </Box>
     </Container>
