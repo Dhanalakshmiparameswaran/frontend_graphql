@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -18,7 +18,9 @@ const LoginForm: React.FC = () => {
 
   const [signIn] = useMutation(SIGNIN_MUTATION);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    localStorage.removeItem('token');
+  },[])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -30,9 +32,11 @@ const LoginForm: React.FC = () => {
     try {
       const { data } = await signIn({ variables: { email, password } });
 
-      if (data && data.login) {
-        const { login } = data;
-        console.log("Logged in user:", login);
+      if (data && data.signIn) {
+        const { signIn } = data;
+        localStorage.setItem("token", signIn.token);
+        localStorage.setItem("userRole", signIn.role);
+        localStorage.setItem("userName", signIn.name);
         setError("");
         navigate("/table");
       }
