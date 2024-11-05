@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+## React App for Student Mark Analysis
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This application is a student mark entry portal where each student can view and analyze their marks with an interactive and visually engaging interface.
+Table of Contents
+
+    1.Features
+    2.Technologies Used
+    3.Development Setup
+    4.Available Scripts
+    5.Folder Structure
+    6.Contributing
+
+## Features
+
+    1.Student Dashboard: Displays a summary of marks across subjects or assessments.
+    2.Interactive UI: Provides easy navigation and an intuitive user experience.
+    3.Responsive Design: Optimized for both desktop and mobile devices.
+    4.Real-time Updates: Reflects updates instantly as marks are added or modified.
+
+## Technologies Used
+
+    React: A JavaScript library for building user interfaces.
+    Apollo Client: For managing GraphQL data and state.
+    GraphQL: Used for fetching and managing data with queries and mutations.
+    Material-UI (MUI): A React component library for styling and creating responsive design.
+
+## Development Setup
+
+To set up your local development environment, follow these steps:
+
+  ## 1.Clone the repository:
+
+  git clone https://github.com/Dhanalakshmiparameswaran/frontend_graphql.git
+
+  ## 2.Navigate to the project directory:
+
+  cd frontend_graphql
+
+  ## 3.Install dependencies:
+
+   ### `npm install`
+
+    Start the development server:
+
+   ### `npm start`
+
+    This will run the app in development mode. Open http://localhost:3000 to view it in your browser.
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run the following commands:
 
-### `npm start`
+  ## npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    Starts the app in development mode.
+    Open http://localhost:3000 to view it in your browser. The page reloads automatically if you make edits, and any linting errors will be displayed in the console.
+  ## npm test
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    Launches the test runner in interactive watch mode.
+    This helps in running unit and integration tests, ensuring that the app’s components function as expected.
+  ## npm run build
 
-### `npm test`
+    Builds the app for production in the build folder.
+    The production build is optimized for best performance. This version of the app is ready to be deployed.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## graphql
 
-### `npm run build`
+React-Mark-Analysis/
+├── public/              # Public assets (HTML file, icons, etc.)
+├── src/                 # Source code
+│   ├── components/      # Reusable components (e.g., table, logIn,)
+│   ├── graphql/         # GraphQL queries and mutations
+│   ├── App.tsx          # Main application component using Apollo Client
+│   ├── index.tsx        # Entry point for React DOM rendering
+│   └── App.css          # Global styles
+├── package.json         # Project dependencies and scripts
+└── README.md            # Project documentation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contributing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Contributions are welcome! Please follow these steps to contribute to the project:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    1.Fork the repository.
+    2.Create a new branch (git checkout -b YourBranchNewName).
+    3.Commit your changes (git commit -m 'Add your commit message here').
+    4.Push to the branch (git push origin YourBranchName).
+    5.Open a pull request.
