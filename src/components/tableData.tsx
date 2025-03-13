@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { Student, Table } from "./tableContent";
 import { TextField, Button, Alert } from "@mui/material";
-import { DELETE_ROW, GET_STUDENTS } from "../graphQl/graphQlMutations";
+import { DELETE_ROW, GET_STUDENTS } from "../graphQl/graphQlMutations"; 
 
 const TableData: React.FC = () => {
   const { loading, error, data } = useQuery(GET_STUDENTS);
@@ -13,9 +13,7 @@ const TableData: React.FC = () => {
   const [deleteRow] = useMutation(DELETE_ROW, {
     refetchQueries: [{ query: GET_STUDENTS }],
   });
-
   const handleUpdate = (student: Student) => {
-    console.log("Update student:", student);
   };
 
   const handleDelete = (id: number) => {

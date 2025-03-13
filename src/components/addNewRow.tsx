@@ -10,10 +10,11 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ADD_NEW_ROW, GET_STUDENTS } from "../graphQl/graphQlMutations";
+import { useNavigate } from "react-router-dom";
 
-export const AddNewRow = () => {
+export const AddNewRow: React.FC = () => {
   const [formData, setFormData] = useState({
     roll_no: "",
     name: "",
@@ -21,16 +22,32 @@ export const AddNewRow = () => {
     mark: "",
   });
   const [open, setOpen] = useState(false);
+  const [userRole, setUserRole] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    setUserRole(role || "");
+  }, []);
 
   const [addNewRow] = useMutation(ADD_NEW_ROW, {
     refetchQueries: [{ query: GET_STUDENTS }],
     onCompleted: () => {
-      console.log("Mutation completed successfully");
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
+      resetForm(); 
     },
   });
+
+  const resetForm = () => {
+    setFormData({
+      roll_no: "",
+      name: "",
+      classSection: "",
+      mark: "",
+    });
+  };
 
   const handleAddNew = (
     rollno: string,
@@ -38,7 +55,6 @@ export const AddNewRow = () => {
     classSection: string,
     mark: string
   ) => {
-    console.log("Adding new row:", { rollno, name, classSection, mark });
     addNewRow({
       variables: {
         roll_no: rollno,
@@ -57,19 +73,14 @@ export const AddNewRow = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    handleAddNew(
-      formData.roll_no,
-      formData.name,
-      formData.classSection,
-      formData.mark
-    );
-    setOpen(false);
+    handleAddNew(formData.roll_no, formData.name, formData.classSection, formData.mark);
+    handleClose();
   };
 
   const handleClickOpen = () => {
+    resetForm(); 
     setOpen(true);
   };
 
@@ -77,11 +88,28 @@ export const AddNewRow = () => {
     setOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <>
-      <div className="header">
-        <button onClick={handleClickOpen} className="btn">
-          Add New Student
+      <div
+        className="header"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {userRole === "TEACHER" && (
+          <button onClick={handleClickOpen} className="btn">
+            Add New Student
+          </button>
+        )}
+        <button onClick={handleLogout} className="btn">
+          Logout
         </button>
       </div>
 

@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import LoginForm from "./components/signIn";
 import SignupForm from "./components/signUp";
+import Protected from "./components/productedRoute";
 import OnboardPage from "./components/onboardPage";
 
 function App() {
@@ -10,9 +11,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<SignupForm />} />
-          <Route path="/login" element={<LoginForm />} />
           <Route path="/" element={<LoginForm />} />
-          <Route path="/table" element={<OnboardPage />} />
+          <Route path="/table" element={<Protected><OnboardPage /></Protected>} />
         </Routes>
       </BrowserRouter>
     </>
